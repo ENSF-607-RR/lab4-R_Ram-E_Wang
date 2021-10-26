@@ -1,7 +1,7 @@
 package Task2;
 
 /**
- * RandomNumberGenerator generators are random number and store it.
+ * Task1.RandomNumberGenerator generators are random number and store it.
  */
 public class RandomNumberGenerator implements Runnable{
 
