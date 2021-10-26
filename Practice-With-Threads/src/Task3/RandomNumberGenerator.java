@@ -11,7 +11,7 @@ public class RandomNumberGenerator implements Runnable{
         return sum;
     }
 
-    public void generateNumber(){
+    public synchronized void generateNumber(){
         int randomNumber = (int)(Math.random() * 100 + 1);
         System.out.println("Random Number Generated is: " + randomNumber);
 
@@ -20,7 +20,6 @@ public class RandomNumberGenerator implements Runnable{
 
     @Override
     public void run() {
-        generateNumber();
         generateNumber();
     }
 }
