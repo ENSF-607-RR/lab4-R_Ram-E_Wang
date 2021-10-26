@@ -1,5 +1,7 @@
+package Task1;
+
 /**
- * RandomNumberApp generates five random numbers using theads and sums them.
+ * Task1.RandomNumberApp generates five random numbers using theads and sums them.
  */
 public class RandomNumberApp {
 
