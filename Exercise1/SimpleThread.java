@@ -1,5 +1,5 @@
 
-public class SimpleThread extends Thread{
+public class SimpleThread implements Runnable{
 
 	Resource resource;
 	
@@ -23,8 +23,9 @@ public class SimpleThread extends Thread{
 
 	public static void main(String args[]) {
 		Resource resource = new Resource();
-		Thread t = new SimpleThread(resource);
-		Thread s = new SimpleThread(resource);
+		SimpleThread runnable = new SimpleThread(resource);
+		Thread t = new Thread(runnable);
+		Thread s = new Thread(runnable);
 		
 		t.start();
 		s.start();
