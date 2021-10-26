@@ -6,17 +6,13 @@ package Task2;
 public class RandomNumberApp {
 
     public static void main(String[] args){
-        RandomNumberGenerator rng1 = new RandomNumberGenerator();
-        RandomNumberGenerator rng2 = new RandomNumberGenerator();
-        RandomNumberGenerator rng3 = new RandomNumberGenerator();
-        RandomNumberGenerator rng4 = new RandomNumberGenerator();
-        RandomNumberGenerator rng5 = new RandomNumberGenerator();
+        RandomNumberGenerator rng = new RandomNumberGenerator();
 
-        Thread t1 = new Thread(rng1);
-        Thread t2 = new Thread(rng2);
-        Thread t3 = new Thread(rng3);
-        Thread t4 = new Thread(rng4);
-        Thread t5 = new Thread(rng5);
+        Thread t1 = new Thread(rng);
+        Thread t2 = new Thread(rng);
+        Thread t3 = new Thread(rng);
+        Thread t4 = new Thread(rng);
+        Thread t5 = new Thread(rng);
 
         t1.start();
         t2.start();
