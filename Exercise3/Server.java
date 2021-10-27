@@ -76,6 +76,8 @@ public class Server {
         // close connection at the end
         try {
             serverSocket.close();
+            socketIn.close();
+            socketOut.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
