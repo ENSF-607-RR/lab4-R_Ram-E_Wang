@@ -27,20 +27,18 @@ public class Client {
         }
     }
 
-    public void runClient(){
+
+    public void runClient() {
 
         String line = "";
-        String response = "";
+        String response = null;
         try {
             System.out.println("Connected to server, waiting on other player.");
             // waits for other player to connect
-            while(true){
-                response = socketInput.readLine();
-                if(response.equals("GO")){
-                    System.out.println(response);
-                    break;
-                }
-            }
+
+            response = socketInput.readLine();
+            System.out.println(response);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,26 +50,33 @@ public class Client {
 //            // until game is over
 //        }
 
-        // other player connected. need name
-        while(!response.equals("VALID")){
+        // user to enter name
+//        try {
+//            response = socketInput.readLine();
+//            System.out.println(response);
+//            line = standardInput.readLine();
+//            socketOutput.println(line);
+//        } catch (IOException e) {
+//            System.err.println("Couldnt get response");
+//        }
+
+        while(true){
             try {
-                System.out.println("Please enter your name");
+                response = socketInput.readLine();
+                System.out.println(response);
                 line = standardInput.readLine();
                 socketOutput.println(line);
-                response = socketInput.readLine();
-
-                System.out.println(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
 
-
     }
 
     public static void main(String[] args){
         Client client = new Client("localhost", 9090);
+
         client.runClient();
     }
 

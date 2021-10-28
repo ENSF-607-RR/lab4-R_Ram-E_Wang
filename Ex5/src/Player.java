@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 /**
  * Player represents a player playing a tic-tac-toe game.
@@ -17,6 +18,8 @@ public class Player {
     private Board board;
     private char mark;
     private Player opponent;
+    private PrintWriter socketOut;
+    private BufferedReader socketIn;
 
     /**
      * Class constructor used to set the players name and
@@ -24,7 +27,7 @@ public class Player {
      * @param name name of the plauer
      * @param mark mark of the player
      */
-    public Player(String name, char mark) {
+    public Player(String name, char mark, BufferedReader socketIn, PrintWriter socketOut) {
         setName(name);
         setMark(mark);
     }

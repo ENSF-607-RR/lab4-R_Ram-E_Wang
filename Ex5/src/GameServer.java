@@ -5,23 +5,27 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GameServer {
 
     private Socket clientSocketX;
-    private Socket clientSocketY;
+    private Socket clientSocketO;
     private ServerSocket serverSocket;
     private PrintWriter socketOutX;
     private BufferedReader socketInX;
-    private PrintWriter socketOutY;
-    private BufferedReader socketInY;
+    private PrintWriter socketOutO;
+    private BufferedReader socketInO;
+    private ExecutorService pool;
 
     // TODO add ExecutorService
 
     public GameServer(){
         try {
             serverSocket = new ServerSocket(9090);
-            // TODO add ExecutorService
+            pool = Executors.newFixedThreadPool(5);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,26 +37,29 @@ public class GameServer {
      */
     public void runServer(){
         try{
-            // waiting on client 1 to connect
-            clientSocketX = serverSocket.accept();
-            socketInX = new BufferedReader(new InputStreamReader(clientSocketX.getInputStream()));
-            socketOutX = new PrintWriter(clientSocketX.getOutputStream(), true);
+            while(true) {
+                // waiting on client 1 to connect
+                clientSocketX = serverSocket.accept();
+                socketInX = new BufferedReader(new InputStreamReader(clientSocketX.getInputStream()));
+                socketOutX = new PrintWriter(clientSocketX.getOutputStream(), true);
 
-            // waiting on client 2 to connect
-            clientSocketY = serverSocket.accept();
-            socketInY = new BufferedReader(new InputStreamReader(clientSocketY.getInputStream()));
-            socketOutY = new PrintWriter(clientSocketY.getOutputStream(), true);
-            socketOutX.println("GO");
-            socketOutY.println("GO");
+                // waiting on client 2 to connect
+                clientSocketO = serverSocket.accept();
+                socketInO = new BufferedReader(new InputStreamReader(clientSocketO.getInputStream()));
+                socketOutO = new PrintWriter(clientSocketO.getOutputStream(), true);
 
-            Game g1 = new Game(socketOutX, socketInX, socketOutY, socketInY );
-            Thread t1 = new Thread(g1);
-            t1.start();
+                // both players connected
+                socketOutX.println("Starting Game.");
+                socketOutO.println("Starting Game.");
 
-
+                Game game = new Game(socketOutX, socketInX, socketOutO, socketInO);
+                pool.execute(game);
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        pool.shutdown();
     }
 
     public static void main(String[] args){
