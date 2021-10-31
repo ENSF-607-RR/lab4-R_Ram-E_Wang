@@ -1,3 +1,10 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Arrays;
+
 /**
  * Board represents the board for a tic-tac-toe game.
  * Board's methods and data fields are used to display the board, allow players
@@ -12,10 +19,12 @@ public class Board implements Constants {
 	private char theBoard[][];
 	private int markCount;
 
+
 	/**
 	 * Class constructor used to initialize a blank board.
 	 */
 	public Board() {
+
 		markCount = 0;
 		theBoard = new char[3][];
 		for (int i = 0; i < 3; i++) {
@@ -68,18 +77,20 @@ public class Board implements Constants {
 	/**
 	 * Displays the board in its current state in the console.
 	 */
-	public void display() {
-		displayColumnHeaders();
-		addHyphens();
+	public String display() {
+		String board = "";
+		board += displayColumnHeaders();
+		board += addHyphens();
 		for (int row = 0; row < 3; row++) {
-			addSpaces();
-			System.out.print("    row " + row + ' ');
+			board += addSpaces();
+			board += "    row " + row + ' ';
 			for (int col = 0; col < 3; col++)
-				System.out.print("|  " + getMark(row, col) + "  ");
-			System.out.println("|");
-			addSpaces();
-			addHyphens();
+				board += "|  " + getMark(row, col) + "  ";
+			board += "|";
+			board += addSpaces();
+			board += addHyphens();
 		}
+		return board;
 	}
 
 	/**
@@ -158,30 +169,53 @@ public class Board implements Constants {
 	/**
 	 * Displays the column headers of the board.
 	 */
-	void displayColumnHeaders() {
-		System.out.print("          ");
+	String displayColumnHeaders() {
+		String columnHeaders = "";
+		columnHeaders+= "          ";
 		for (int j = 0; j < 3; j++)
-			System.out.print("|col " + j);
-		System.out.println();
+			columnHeaders += "|col " + j;
+		columnHeaders += "\n";
+		return columnHeaders;
 	}
 
 	/**
 	 * Displays hyphens on the board.
 	 */
-	void addHyphens() {
-		System.out.print("          ");
+	String addHyphens() {
+		String hyphens = "          ";
 		for (int j = 0; j < 3; j++)
-			System.out.print("+-----");
-		System.out.println("+");
+			hyphens += "+-----";
+		hyphens += "+\n";
+		return hyphens;
 	}
 
 	/**
 	 * Displays spaces on the board.
 	 */
-	void addSpaces() {
-		System.out.print("          ");
+	String addSpaces() {
+		String spaces = "";
+		spaces += "          ";
 		for (int j = 0; j < 3; j++)
-			System.out.print("|     ");
-		System.out.println("|");
+			spaces+= "|     ";
+		spaces += "|\n";
+
+		return spaces;
+	}
+
+	@Override
+	public String toString() {
+		String board = "";
+		board += displayColumnHeaders();
+		board += addHyphens();
+		for (int row = 0; row < 3; row++) {
+			board += addSpaces();
+			board += "    row " + row + ' ';
+			for (int col = 0; col < 3; col++)
+				board += "|  " + getMark(row, col) + "  ";
+			board += "|\n";
+			board += addSpaces();
+			board += addHyphens();
+		}
+		return board + "\0";
 	}
 }

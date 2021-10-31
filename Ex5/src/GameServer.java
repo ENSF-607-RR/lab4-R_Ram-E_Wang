@@ -11,16 +11,9 @@ import java.util.concurrent.Executors;
 
 public class GameServer {
 
-    private Socket clientSocketX;
-    private Socket clientSocketO;
     private ServerSocket serverSocket;
-    private PrintWriter socketOutX;
-    private BufferedReader socketInX;
-    private PrintWriter socketOutO;
-    private BufferedReader socketInO;
     private ExecutorService pool;
 
-    // TODO add ExecutorService
 
     public GameServer(){
         try {
@@ -37,26 +30,24 @@ public class GameServer {
      */
     public void runServer(){
         try{
+
             while(true) {
-                // waiting on client 1 to connect
-                clientSocketX = serverSocket.accept();
-                socketInX = new BufferedReader(new InputStreamReader(clientSocketX.getInputStream()));
-                socketOutX = new PrintWriter(clientSocketX.getOutputStream(), true);
 
-                // waiting on client 2 to connect
-                clientSocketO = serverSocket.accept();
-                socketInO = new BufferedReader(new InputStreamReader(clientSocketO.getInputStream()));
-                socketOutO = new PrintWriter(clientSocketO.getOutputStream(), true);
+                // each player connects to the server
+                Player xPlayer = new Player(serverSocket.accept(), 'X');
+                Player oPlayer = new Player(serverSocket.accept(), 'O');
 
-                // both players connected
-                socketOutX.println("Starting Game.");
-                socketOutO.println("Starting Game.");
+                Referee theRef = new Referee();
+                theRef.setxPlayer(xPlayer);
+                theRef.setoPlayer(oPlayer);
 
-                Game game = new Game(socketOutX, socketInX, socketOutO, socketInO);
+                Game game = new Game();
+                game.appointReferee(theRef);
                 pool.execute(game);
             }
         }catch (IOException e){
             e.printStackTrace();
+            pool.shutdown();
         }
 
         pool.shutdown();
@@ -64,6 +55,7 @@ public class GameServer {
 
     public static void main(String[] args){
         GameServer theServer = new GameServer();
+        System.out.println("Server is running.");
         theServer.runServer();
     }
 }

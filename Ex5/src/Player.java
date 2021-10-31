@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Player represents a player playing a tic-tac-toe game.
@@ -24,12 +26,18 @@ public class Player {
     /**
      * Class constructor used to set the players name and
      * the mark they will use.
-     * @param name name of the plauer
      * @param mark mark of the player
      */
-    public Player(String name, char mark, BufferedReader socketIn, PrintWriter socketOut) {
-        setName(name);
+    public Player(Socket socket, char mark) {
+
         setMark(mark);
+
+        try{
+            socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            socketOut = new PrintWriter(socket.getOutputStream(), true);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -43,20 +51,31 @@ public class Player {
         // player makes move
         this.makeMove();
         // show the board
-        board.display();
+        socketOut.println(board);
+        // show board to opponent
+        opponent.getSocketOut().println(board);
         // game was a tie
         if(board.isFull()){
-            System.out.println("Game is a Tie.");
+            socketOut.println("Game is a tie");
+            opponent.getSocketOut().println("Game is a tie");
+            socketOut.println("QUIT");
+            opponent.getSocketOut().println("QUIT");
             return;
         }
         // player o won
         if(board.oWins()){
-            System.out.println("Player O wins!");
+            socketOut.println("Player O wins!");
+            opponent.getSocketOut().println("Player O wins!");
+            socketOut.println("QUIT");
+            opponent.getSocketOut().println("QUIT");
             return;
         }
         // player x won
         if(board.xWins()) {
-            System.out.println("Player X wins");
+            socketOut.println("Player X wins!");
+            opponent.getSocketOut().println("Player X wins!");
+            socketOut.println("QUIT");
+            opponent.getSocketOut().println("QUIT");
             return;
         }
         // game still on, pass turn to next player
@@ -68,13 +87,13 @@ public class Player {
      */
     public void makeMove() throws IOException {
 
-        System.out.println(this.getName() + "'s turn.");
-        BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+        socketOut.println(this.getName() + "'s turn.");
+        opponent.getSocketOut().println(this.getName()+ "'s turn.");
 
-        System.out.println("Enter row: ");
-        int row = Integer.parseInt(stdin.readLine());
-        System.out.println("Enter column: ");
-        int col = Integer.parseInt(stdin.readLine());
+        sendString("Enter row: ");
+        int row = Integer.parseInt(socketIn.readLine());
+        sendString("Enter column: ");
+        int col = Integer.parseInt(socketIn.readLine());
 
         board.addMark(row, col, this.mark);
     }
@@ -101,6 +120,42 @@ public class Player {
      */
     public String getName() {
         return name;
+    }
+
+    public PrintWriter getSocketOut() {
+        return socketOut;
+    }
+
+    public void showBoard(){
+        sendString(board.toString());
+    }
+
+    /**
+     * Helper function to send a string to the client. Uses the null character
+     * protocol to designate end of message.
+     * @param toSend
+     */
+    private void sendString(String toSend){
+        socketOut.println(toSend + " \0");
+        socketOut.flush();
+    }
+
+    /**
+     * Gets the players name from the client side
+     */
+    public void getPlayerName(){
+
+        try {
+            sendString("Please enter the name of '" + this.mark + "' player:");
+            name = socketIn.readLine();
+            while(name == null){
+                sendString("Please try again: ");
+                name = socketIn.readLine();
+            }
+            setName(name);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

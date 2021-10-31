@@ -10,6 +10,7 @@ import java.io.IOException;
  */
 public class Referee {
 
+
     private Player xPlayer;
     private Player oPLayer;
     private Board board;
@@ -19,18 +20,29 @@ public class Referee {
      * The game starts with the X player.
      */
     public void runTheGame() throws IOException {
+
         // set each player opponents
         xPlayer.setOpponent(oPLayer);
         oPLayer.setOpponent(xPlayer);
 
-        // set the board for each player
-        xPlayer.setBoard(board);
-        oPLayer.setBoard(board);
+        // get and set each players names
+        xPlayer.getPlayerName();
+        oPLayer.getPlayerName();
 
-        board.display();
+        xPlayer.getSocketOut().println(board);
+        oPLayer.getSocketOut().println(board);
+
         // player x starts
         xPlayer.play();
 
+    }
+
+    public Player getxPlayer() {
+        return xPlayer;
+    }
+
+    public Player getoPLayer() {
+        return oPLayer;
     }
 
     /**

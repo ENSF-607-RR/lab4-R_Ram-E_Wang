@@ -29,47 +29,43 @@ public class Client {
 
 
     public void runClient() {
+        System.out.println("Connected to server, waiting on other player.");
 
-        String line = "";
-        String response = null;
-        try {
-            System.out.println("Connected to server, waiting on other player.");
-            // waits for other player to connect
+        try{
+            while(true){
 
-            response = socketInput.readLine();
-            System.out.println(response);
+                String response = "";
+                // Read a print responses frm the server, Null means stop reading
+                while(true){
 
-        } catch (IOException e) {
+                    response = socketInput.readLine();
+                    // full message has been received from the server
+                    if(response.contains("\0")){
+                        response = response.replace("\0", "");
+                        System.out.println(response);
+                        break; // break out of inner while
+                    }
+
+                    // game is over, end communication
+                    if(response.equals("QUIT")){
+                        return; // breaks out of both while loops
+                    }
+                    System.out.println(response);
+                }
+
+                // Read input from user and send to server
+                if(response.contains(":")) {
+                    response = standardInput.readLine();
+                    socketOutput.println(response);
+                    socketOutput.flush();
+                }
+            }
+        }catch(IOException e){
             e.printStackTrace();
         }
-
-//        while(true){
-//            // read from server
-//            // display in termianl
-//            // write
-//            // until game is over
-//        }
-
-        // user to enter name
-//        try {
-//            response = socketInput.readLine();
-//            System.out.println(response);
-//            line = standardInput.readLine();
-//            socketOutput.println(line);
-//        } catch (IOException e) {
-//            System.err.println("Couldnt get response");
-//        }
-
-        while(true){
-            try {
-                response = socketInput.readLine();
-                System.out.println(response);
-                line = standardInput.readLine();
-                socketOutput.println(line);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        finally {
+            // close communication
+            socketOutput.close();
         }
 
     }
