@@ -1,13 +1,15 @@
 package Task2;
 
+import java.util.ArrayList;
+
 /**
  * Task1.RandomNumberGenerator generators are random number and store it.
  */
 public class RandomNumberGenerator implements Runnable{
 
-    private static int sum = 0;
+    private static ArrayList<Integer> sum = new ArrayList<>();
 
-    public static int getSum() {
+    public static ArrayList<Integer> getSum() {
         return sum;
     }
 
@@ -15,7 +17,9 @@ public class RandomNumberGenerator implements Runnable{
         int randomNumber = (int)(Math.random() * 100 + 1);
         System.out.println("Random Number Generated is: " + randomNumber);
 
-        sum += randomNumber; // TODO why doesnt this create a Race condition?
+        synchronized (this) {
+            sum.add(randomNumber);
+        }
     }
 
     @Override

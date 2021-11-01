@@ -1,5 +1,7 @@
 package Task2;
 
+import java.util.ArrayList;
+
 /**
  * Task1.RandomNumberApp generates five random numbers using theads and sums them.
  */
@@ -31,7 +33,12 @@ public class RandomNumberApp {
             e.printStackTrace();
         }
 
+        ArrayList<Integer> sums = RandomNumberGenerator.getSum();
+        int sum = 0;
+        for(int i = 0; i < sums.size(); i++){
+            sum += sums.get(i);
+        }
 
-        System.out.println("Sum of random Numbers: " + RandomNumberGenerator.getSum());
+        System.out.println("Sum of random Numbers: " + sum);
     }
 }
