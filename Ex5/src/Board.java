@@ -75,25 +75,6 @@ public class Board implements Constants {
 	}
 
 	/**
-	 * Displays the board in its current state in the console.
-	 */
-	public String display() {
-		String board = "";
-		board += displayColumnHeaders();
-		board += addHyphens();
-		for (int row = 0; row < 3; row++) {
-			board += addSpaces();
-			board += "    row " + row + ' ';
-			for (int col = 0; col < 3; col++)
-				board += "|  " + getMark(row, col) + "  ";
-			board += "|";
-			board += addSpaces();
-			board += addHyphens();
-		}
-		return board;
-	}
-
-	/**
 	 * Adds a specified mark to the specified square.
 	 * @param row the row to add the mark
 	 * @param col the column to add the mark
@@ -202,6 +183,10 @@ public class Board implements Constants {
 		return spaces;
 	}
 
+	/**
+	 * Method to print the board as a string.
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		String board = "";

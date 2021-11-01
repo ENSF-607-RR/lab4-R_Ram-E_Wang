@@ -33,17 +33,18 @@ public class GameServer {
 
             while(true) {
 
-                // each player connects to the server
+                // wait for two players to connect
                 Player xPlayer = new Player(serverSocket.accept(), 'X');
                 Player oPlayer = new Player(serverSocket.accept(), 'O');
 
+                // players connected, set the ref and players
                 Referee theRef = new Referee();
                 theRef.setxPlayer(xPlayer);
                 theRef.setoPlayer(oPlayer);
 
-                Game game = new Game();
+                Game game = new Game(); // create instance of the game
                 game.appointReferee(theRef);
-                pool.execute(game);
+                pool.execute(game); // start game on new thread
             }
         }catch (IOException e){
             e.printStackTrace();

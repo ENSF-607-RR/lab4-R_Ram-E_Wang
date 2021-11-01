@@ -29,6 +29,7 @@ public class Referee {
         xPlayer.getPlayerName();
         oPLayer.getPlayerName();
 
+        // show board to both players
         xPlayer.getSocketOut().println(board);
         oPLayer.getSocketOut().println(board);
 

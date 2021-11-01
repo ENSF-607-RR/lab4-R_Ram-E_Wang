@@ -34,6 +34,9 @@ public class Game implements Constants, Runnable {
 		theRef.getoPLayer().setBoard(theBoard);
     }
 
+	/**
+	 * Method to run the game.
+	 */
 	@Override
 	public void run() {
 		try {

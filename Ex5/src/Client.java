@@ -27,7 +27,9 @@ public class Client {
         }
     }
 
-
+    /**
+     * Method for client to send and receive messages to and from the server
+     */
     public void runClient() {
         System.out.println("Connected to server, waiting on other player.");
 
@@ -53,7 +55,7 @@ public class Client {
                     System.out.println(response);
                 }
 
-                // Read input from user and send to server
+                // Read input from user and send to server only if colon flag is specified
                 if(response.contains(":")) {
                     response = standardInput.readLine();
                     socketOutput.println(response);

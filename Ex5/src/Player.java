@@ -122,12 +122,12 @@ public class Player {
         return name;
     }
 
+    /**
+     * Method to get the output stream to the client side.
+     * @return
+     */
     public PrintWriter getSocketOut() {
         return socketOut;
-    }
-
-    public void showBoard(){
-        sendString(board.toString());
     }
 
     /**
