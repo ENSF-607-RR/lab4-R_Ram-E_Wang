@@ -15,7 +15,7 @@ public class RandomNumberGenerator implements Runnable{
         int randomNumber = (int)(Math.random() * 100 + 1);
         System.out.println("Random Number Generated is: " + randomNumber);
 
-        sum += randomNumber; // TODO why doesnt this create a race condition?
+        synchronized (this) {sum += randomNumber;}
     }
 
     @Override
